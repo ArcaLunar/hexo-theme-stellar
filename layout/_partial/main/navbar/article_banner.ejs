@@ -9,6 +9,7 @@ if (page.banner) {
 } else if (theme.wiki.tree[page.wiki]?.banner != null) {
   banner.url = theme.wiki.tree[page.wiki]?.banner
 }
+banner.url = "https://api.mtyqx.cn/tapi/random.php";
 banner = Object.assign(banner, page.banner_info)
 // 标题
 if (banner.title == null) {

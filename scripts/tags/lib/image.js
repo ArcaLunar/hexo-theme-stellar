@@ -103,7 +103,8 @@ module.exports = ctx => function(args) {
 
   if (args.alt && args.alt.length > 0) {
     el += '<div class="image-meta">'
-    el += '<span class="image-caption center">' + args.alt + '</span>'
+    var content = ctx.render.renderSync({ text: args.alt, engine: 'markdown' }).trim().replace(/^<p>(.*?)<\/p>$/g, '$1')
+    el += '<span class="image-caption center">' + content + '</span>'
     el += '</div>'
   }
 

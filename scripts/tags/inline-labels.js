@@ -8,28 +8,28 @@
 'use strict'
 
 
-hexo.extend.tag.register('u', function(args) {
-  return `<u>${args.join(' ')}</u>`
+hexo.extend.tag.register('u', function (args) {
+  return hexo.render.renderSync({ text: `<u>${args.join(' ')}</u>`, engine: 'markdown' }).trim().replace(/^<p>(.*?)<\/p>$/g, '$1')
 })
-hexo.extend.tag.register('emp', function(args) {
-  return `<emp>${args.join(' ')}</emp>`
+hexo.extend.tag.register('emp', function (args) {
+  return hexo.render.renderSync({ text: `<emp>${args.join(' ')}</emp>`, engine: 'markdown' }).trim().replace(/^<p>(.*?)<\/p>$/g, '$1')
 })
-hexo.extend.tag.register('wavy', function(args) {
-  return `<wavy>${args.join(' ')}</wavy>`
+hexo.extend.tag.register('wavy', function (args) {
+  return hexo.render.renderSync({ text: `<wavy>${args.join(' ')}</wavy>`, engine: 'markdown' }).trim().replace(/^<p>(.*?)<\/p>$/g, '$1')
 })
-hexo.extend.tag.register('del', function(args) {
-  return `<del>${args.join(' ')}</del>`
+hexo.extend.tag.register('del', function (args) {
+  return hexo.render.renderSync({ text: `<del>${args.join(' ')}</del>`, engine: 'markdown' }).trim().replace(/^<p>(.*?)<\/p>$/g, '$1')
 })
-hexo.extend.tag.register('kbd', function(args) {
-  return `<kbd>${args.join(' ')}</kbd>`
+hexo.extend.tag.register('kbd', function (args) {
+  return hexo.render.renderSync({ text: `<kbd>${args.join(' ')}</kbd>`, engine: 'markdown' }).trim().replace(/^<p>(.*?)<\/p>$/g, '$1')
 })
-hexo.extend.tag.register('psw', function(args) {
-  return `<psw>${args.join(' ')}</psw>`
+hexo.extend.tag.register('psw', function (args) {
+  return hexo.render.renderSync({ text: `<psw>${args.join(' ')}</psw>`, engine: 'markdown' }).trim().replace(/^<p>(.*?)<\/p>$/g, '$1')
 })
-hexo.extend.tag.register('blur', function(args) {
-  return `<blur>${args.join(' ')}</blur>`
+hexo.extend.tag.register('blur', function (args) {
+  return hexo.render.renderSync({ text: `<blur>${args.join(' ')}</blur>`, engine: 'markdown' }).trim().replace(/^<p>(.*?)<\/p>$/g, '$1')
 })
-hexo.extend.tag.register('sup', function(args) {
+hexo.extend.tag.register('sup', function (args) {
   args = hexo.args.map(args, ['color'], ['text'])
   var el = ''
   el += '<sup class="tag-plugin colorful sup"' + ' ' + hexo.args.joinTags(args, ['color']).join(' ') + '>'
@@ -37,7 +37,7 @@ hexo.extend.tag.register('sup', function(args) {
   el += '</sup>'
   return el
 })
-hexo.extend.tag.register('sub', function(args) {
+hexo.extend.tag.register('sub', function (args) {
   args = hexo.args.map(args, ['color'], ['text'])
   var el = ''
   el += '<sub class="tag-plugin colorful sub"' + ' ' + hexo.args.joinTags(args, ['color']).join(' ') + '>'

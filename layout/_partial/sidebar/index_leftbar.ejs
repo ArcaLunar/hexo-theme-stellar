@@ -151,9 +151,6 @@ function layoutLogo() {
 
 function layoutNavArea() {
   var el = ''
-  if (page.menu == false) {
-    return el
-  }
   el += `<div class="nav-area">`
   el += partial('menu', {where: 'sidebar'})
   el += `</div>`

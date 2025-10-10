@@ -3,7 +3,7 @@
     color: var(--text)
     line-height: 1.8
     >a:first-child
-      background: var(--theme)
+      // background: var(--theme)
       border-radius: 2px
       margin-right: 8px
       padding: 0 2px
@@ -15,21 +15,30 @@
         font-weight: 700
       &:before
         content: ''
-        font-size: 0.5em
+        color: var(--theme)
+        //font-size: 0.5em
       &:after
         font-size: 0.25em
   h2
-    font-weight: 500
+    //font-weight: 500
+    font-size: 1.6em
     >a:first-child
       &:before
-        content: hexo-config('style.header_prefix.h2')
+        // content: hexo-config('style.header_prefix.h2')
+        content: '## '
   h3
+    font-size: 1.4em
     >a:first-child:before
-      content: hexo-config('style.header_prefix.h3')
+      // content: hexo-config('style.header_prefix.h3')
+      content: '### '
   h4
+    font-size: 1.2em
     >a:first-child:before
-      content: hexo-config('style.header_prefix.h4')
+      // content: hexo-config('style.header_prefix.h4')
+      content: '#### '
   h5
+    font-size: 1em
     >a:first-child:before
-      content: hexo-config('style.header_prefix.h5')
+      // content: hexo-config('style.header_prefix.h5')
+      content: '##### '
     

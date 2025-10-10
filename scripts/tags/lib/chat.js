@@ -52,11 +52,7 @@ module.exports = ctx => function(args, content) {
   // users
   var arr = content.split(/<!--\s*([\s\S]*?)\s*-->/g).filter(item => item.trim().length > 0)
   if (arr.length > 0) {
-    // 避免用户在没有配置chat_users.yaml时出错
-    if (ctx.theme.config.chat_users){
-      var users = merge(ctx.theme.config.chat_users, ctx.render.renderSync({ text: (arr[0] || ''), engine: 'yaml' }));
-    }
-    var users = ctx.render.renderSync({ text: (arr[0] || ''), engine: 'yaml' });
+    var users = merge(ctx.theme.config.chat_users, ctx.render.renderSync({ text: (arr[0] || ''), engine: 'yaml' }))
   }
 
 
@@ -290,16 +286,13 @@ module.exports = ctx => function(args, content) {
       el += '<div class="user-main">'
 
       el += '<div class="header">'
-      // 防止徽章为空
-      if (user['label']){
-        if (!args.labelColorStyle || args.labelColorStyle == 'dynamic') {
-          el += `<span class="label dynamic-color" style="color:var(--chat-${chatIndex}-label-text-color-${userColorMap[cell['user']]});background:var(--chat-${chatIndex}-label-bg-${userColorMap[cell['user']]});">`
-        } else {
-          el += `<span class="label hand-color" style="color:${user['label']['textColor']};background:${user['label']['bgColor']};">`
-        }
-        el += user['label']['text']
-        el += '</span>'
+      if (!args.labelColorStyle || args.labelColorStyle == 'dynamic') {
+        el += `<span class="label dynamic-color" style="color:var(--chat-${chatIndex}-label-text-color-${userColorMap[cell['user']]});background:var(--chat-${chatIndex}-label-bg-${userColorMap[cell['user']]});">`
+      } else {
+        el += `<span class="label hand-color" style="color:${user['label']['textColor']};background:${user['label']['bgColor']};">`
       }
+      el += user['label']['text']
+      el += '</span>'
       el += '<span class="name">'
       el += user['name']
       el += '</span>'
