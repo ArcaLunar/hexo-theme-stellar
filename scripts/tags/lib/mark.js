@@ -17,7 +17,7 @@ module.exports = ctx => function(args) {
   el += '<mark class="tag-plugin colorful mark"'
   el += ' ' + ctx.args.joinTags(args, ['color']).join(' ')
   el += '>'
-  el += args.text
+  el += ctx.render.renderSync({ text: args.text, engine: 'markdown' }).trim().replace(/^<p>(.*?)<\/p>$/g, '$1')
   el += '</mark>'
   return el
 }
