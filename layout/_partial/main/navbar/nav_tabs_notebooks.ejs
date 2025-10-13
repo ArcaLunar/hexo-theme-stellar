@@ -1,0 +1,56 @@
+<%
+function layoutDiv() {
+  let el = ''
+  el += '<div class="navbar top">'
+  el += '<div class="navbar-blur">'
+  el += '<div class="navbar-container">'
+  el += '<nav class="wiki">'
+
+  const notebooksIndexUrl = pretty_url(theme.site_tree.notebooks.base_dir)
+  el += '<a'
+  if (page.filter !== true) {
+    el += ' class="active"'
+  }
+  el += ' href="' + notebooksIndexUrl + '">' + __('btn.all_notebooks') + '</a>'
+
+  const { all_tags = {}, tree } = theme.notebooks
+  for (const tagId of Object.keys(all_tags)) {
+    const tag = all_tags[tagId]
+    const visibleNotebooks = Array.isArray(tag.notebooks)
+      ? tag.notebooks.filter(id => tree[id] != null)
+      : []
+    if (visibleNotebooks.length === 0) {
+      continue
+    }
+    const isActive = page.filter === true && (
+      (page.tagId && page.tagId === tag.id) ||
+      (page.tagName && page.tagName === tag.name)
+    )
+    el += '<a'
+    if (isActive) {
+      el += ' class="active"'
+    }
+    el += ' href="' + pretty_url(tag.path) + '">' + tag.name + '</a>'
+  }
+
+  const { nav_tabs } = theme.site_tree.notebooks
+  if (nav_tabs) {
+    for (const key of Object.keys(nav_tabs)) {
+      const target = nav_tabs[key]
+      if (full_url_for(page.path).startsWith(full_url_for(target))) {
+        el += '<a class="active" href="' + url_for(target) + '">' + key + '</a>'
+      } else {
+        el += '<a href="' + url_for(target) + '">' + key + '</a>'
+      }
+    }
+  }
+
+  el += '</nav>'
+  el += '</div>'
+  el += '</div>'
+  el += '</div>'
+  return el
+}
+%>
+
+<%- layoutDiv() %>

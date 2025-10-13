@@ -31,6 +31,37 @@ function splitTag(tag) {
   return tag.split('/').filter(t => t.length > 0)
 }
 
+function slugifyTagId(name) {
+  const base = name.toLowerCase().trim()
+  const slug = base
+    .replace(/[\s/_]+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+  if (slug.length > 0) {
+    return slug
+  }
+  return Buffer.from(name).toString('hex')
+}
+
+function normalizeNotebookTags(rawTags) {
+  if (!rawTags) {
+    return []
+  }
+  const tags = Array.isArray(rawTags) ? rawTags : [rawTags]
+  return tags
+    .map(tag => (typeof tag === 'string' ? tag.trim() : ''))
+    .filter(Boolean)
+    .map(name => ({ id: slugifyTagId(name), name }))
+}
+
+function buildGlobalTagPath(ctx, tagId) {
+  const baseDir = ctx.theme.config.site_tree.notebooks.base_dir || 'notebooks'
+  const normalized = baseDir.replace(/^\//, '').replace(/\/$/, '')
+  const prefix = normalized.length > 0 ? `${normalized}/` : ''
+  return `${prefix}tags/${tagId}/index.html`
+}
+
 function prepareNotebook(id, info, ctx) {
   const notebook = info
   notebook.id = id
@@ -62,6 +93,11 @@ function prepareNotebook(id, info, ctx) {
 
   const tagMap = new Map() // tagId: tagInfo
   notebook.tagTree = tagMap
+  const notebookTags = normalizeNotebookTags(notebook.tags)
+  notebook.tagsMeta = notebookTags
+  notebook.tagIds = notebookTags.map(tag => tag.id)
+  notebook.tagNames = notebookTags.map(tag => tag.name)
+  notebook.tags = notebook.tagNames
 
   const rootTag = {
     id: '',
@@ -140,9 +176,39 @@ function getNotebooksObject(ctx) {
     list.push(prepareNotebook(id, info, ctx))
   }
   list.sort((a, b) => a.sort - b.sort)
+
+  const globalTagMap = new Map()
+
   for (const info of list) {
     notebooks.tree[info.id] = info
+
+    for (const tagMeta of info.tagsMeta) {
+      const tagId = tagMeta.id
+      let aggregated = globalTagMap.get(tagId)
+      if (!aggregated) {
+        aggregated = {
+          id: tagId,
+          name: tagMeta.name,
+          path: buildGlobalTagPath(ctx, tagId),
+          notebooks: []
+        }
+        globalTagMap.set(tagId, aggregated)
+      }
+      if (!aggregated.notebooks.includes(info.id)) {
+        aggregated.notebooks.push(info.id)
+      }
+    }
   }
+
+  const allTags = {}
+  Array.from(globalTagMap.values())
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .forEach(tag => {
+      tag.notebooks.sort((a, b) => a.localeCompare(b))
+      allTags[tag.id] = tag
+    })
+
+  notebooks.all_tags = allTags
 
   return notebooks
 }

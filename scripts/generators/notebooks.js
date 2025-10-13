@@ -44,8 +44,26 @@ hexo.extend.generator.register('notebooks', function (locals) {
     data: {
       layout: 'notebooks',
       menu_id: site_tree.notebooks.menu_id,
+      filter: false,
     }
   })
+
+  if (notebooks?.all_tags) {
+    for (const tag of Object.values(notebooks.all_tags)) {
+      routes.push({
+        path: tag.path,
+        layout: ['notebooks'],
+        data: {
+          layout: 'notebooks',
+          menu_id: site_tree.notebooks.menu_id,
+          filter: true,
+          tagId: tag.id,
+          tagName: tag.name,
+          title: tag.name,
+        }
+      })
+    }
+  }
 
   for (const notebook of Object.values(notebooks.tree)) {
     const pages = locals.pages.filter(p => notebook.noteMap.has(p._id)).sort(notebook.order_by)

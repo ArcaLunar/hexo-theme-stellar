@@ -1,8 +1,36 @@
-<%# 笔记本列表页主体部分 %>
-<% for (const notebook of Object.values(theme.notebooks.tree)) { %>
-  <div class="post-list wiki">
-    <a class="post-card wiki<%= scrollreveal(' ') %>" href="<%= pretty_url(notebook.base_dir) %>">
-      <%- include('_partial/main/notebook/notebook_card', { notebook: notebook }) %>
-    </a>
-  </div>
-<% } %>
+<%
+function shouldDisplayNotebook(notebook) {
+  if (page.filter !== true) {
+    return true
+  }
+  const matchesById = Array.isArray(notebook.tagIds) && page.tagId && notebook.tagIds.includes(page.tagId)
+  const matchesByName = Array.isArray(notebook.tagNames) && page.tagName && notebook.tagNames.includes(page.tagName)
+  return matchesById || matchesByName
+}
+
+function layoutNotebookList(renderCard) {
+  let el = ''
+  for (const notebook of Object.values(theme.notebooks.tree)) {
+    if (!shouldDisplayNotebook(notebook)) {
+      continue
+    }
+    el += '<div class="post-list wiki">'
+    el += '<a class="post-card wiki' + scrollreveal(' ') + '" href="' + pretty_url(notebook.base_dir) + '">'
+    el += renderCard(notebook)
+    el += '</a>'
+    el += '</div>'
+  }
+  return el
+}
+
+function layoutDiv() {
+  let el = ''
+  el += partial('_partial/main/navbar/nav_tabs_notebooks')
+  el += layoutNotebookList(function(notebook) {
+    return partial('_partial/main/notebook/notebook_card', { notebook })
+  })
+  return el
+}
+%>
+
+<%- layoutDiv() %>

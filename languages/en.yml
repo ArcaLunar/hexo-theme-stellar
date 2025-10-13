@@ -6,6 +6,7 @@ btn:
   notebook: Notebook
   recent_publish: Recent
   all_wiki: All Products
+  all_notebooks: All Notebooks
   category: Category
   categories: Categories
   tag: Tag
