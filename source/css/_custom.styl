@@ -1,5 +1,23 @@
 @require('_defines/const')
 
+// Scale up Source Serif 4 to match the visual size of LXGW WenKai Screen.
+// Source Serif 4 has a smaller x-height at the same nominal font-size, so we
+// wrap it in a @font-face alias ("source serif 4 adjusted") with size-adjust
+// bumped up. Tweak the percentage if the balance still feels off.
+@font-face
+  font-family: "source serif pro adjusted"
+  src: local("Source Serif Pro")
+  size-adjust: 105%
+  // font-weight: 100 900
+  font-style: normal
+
+@font-face
+  font-family: "source serif pro adjusted"
+  src: local("Source Serif Pro Italic")
+  size-adjust: 105%
+  // font-weight: 100 900
+  font-style: italic
+
 
 // font family
 $ff-body = convert(hexo-config('style.font-family.body'))
